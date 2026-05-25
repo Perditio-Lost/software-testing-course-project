@@ -1,0 +1,70 @@
+# ===== 前端 Vue =====
+vue/node_modules/
+vue/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# ===== Vite 缓存 =====
+.vite/
+*.local
+
+# ===== 后端 SpringBoot =====
+springboot/target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# ===== Maven =====
+.mvn/
+mvnw
+mvnw.cmd
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ===== OS =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== 临时文件 =====
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# ===== 环境配置 =====
+.env
+.env.local
+.env.*.local
+
+# ===== 其他 =====
+files/
+*.pdf
+*.zip
+*.rar
+*.exe

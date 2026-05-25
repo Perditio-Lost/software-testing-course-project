@@ -1,0 +1,29 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/scoreList/scoreList",
+      "style": {
+        "navigationBarTitleText": "我的考试成绩",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/paperDetail/paperDetail",
+      "style": {
+        "navigationBarTitleText": "试卷详情"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "考试成绩查询",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  }
+}

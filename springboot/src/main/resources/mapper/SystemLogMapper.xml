@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.SystemLogMapper">
+
+    <sql id="Base_Column_List">
+        id, user_id, role, operation, method, params, ip, location, time, duration
+    </sql>
+
+    <resultMap id="SystemLogMap" type="com.example.entity.SystemLog">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="role" column="role"/>
+        <result property="operation" column="operation"/>
+        <result property="method" column="method"/>
+        <result property="params" column="params"/>
+        <result property="ip" column="ip"/>
+        <result property="location" column="location"/>
+        <result property="time" column="time"/>
+        <result property="duration" column="duration"/>
+        <result property="userName" column="userName"/>
+        <result property="username" column="username"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.example.entity.SystemLog">
+        INSERT INTO system_log(user_id, role, operation, method, params, ip, location, time, duration)
+        VALUES(#{userId}, #{role}, #{operation}, #{method}, #{params}, #{ip}, #{location}, #{time}, #{duration})
+    </insert>
+
+    <select id="selectAll" resultMap="SystemLogMap">
+        SELECT 
+            sl.id, 
+            sl.user_id, 
+            sl.role, 
+            sl.operation, 
+            sl.method, 
+            sl.params, 
+            sl.ip, 
+            sl.location, 
+            sl.time, 
+            sl.duration,
+            CASE 
+                WHEN sl.role = 'ADMIN' THEN (SELECT name FROM admin WHERE id = sl.user_id)
+                WHEN sl.role = 'TEACHER' THEN (SELECT name FROM teacher WHERE id = sl.user_id)
+                WHEN sl.role = 'STUDENT' THEN (SELECT name FROM student WHERE id = sl.user_id)
+                ELSE NULL
+            END as userName,
+            CASE 
+                WHEN sl.role = 'ADMIN' THEN (SELECT username FROM admin WHERE id = sl.user_id)
+                WHEN sl.role = 'TEACHER' THEN (SELECT username FROM teacher WHERE id = sl.user_id)
+                WHEN sl.role = 'STUDENT' THEN (SELECT username FROM student WHERE id = sl.user_id)
+                ELSE NULL
+            END as username
+        FROM system_log sl
+        <where>
+            <if test="role != null and role != ''">
+                AND sl.role = #{role}
+            </if>
+            <if test="operation != null and operation != ''">
+                AND sl.operation LIKE CONCAT('%', #{operation}, '%')
+            </if>
+            <if test="userName != null and userName != ''">
+                <choose>
+                    <!-- 如果指定了role，只查询对应的表 -->
+                    <when test="role == 'ADMIN'">
+                        AND EXISTS (SELECT 1 FROM admin WHERE id = sl.user_id AND name LIKE CONCAT('%', #{userName}, '%'))
+                    </when>
+                    <when test="role == 'TEACHER'">
+                        AND EXISTS (SELECT 1 FROM teacher WHERE id = sl.user_id AND name LIKE CONCAT('%', #{userName}, '%'))
+                    </when>
+                    <when test="role == 'STUDENT'">
+                        AND EXISTS (SELECT 1 FROM student WHERE id = sl.user_id AND name LIKE CONCAT('%', #{userName}, '%'))
+                    </when>
+                    <!-- 如果没有指定role，需要在所有三个表中查询 -->
+                    <otherwise>
+                        AND (
+                            (sl.role = 'ADMIN' AND EXISTS (SELECT 1 FROM admin WHERE id = sl.user_id AND name LIKE CONCAT('%', #{userName}, '%')))
+                            OR (sl.role = 'TEACHER' AND EXISTS (SELECT 1 FROM teacher WHERE id = sl.user_id AND name LIKE CONCAT('%', #{userName}, '%')))
+                            OR (sl.role = 'STUDENT' AND EXISTS (SELECT 1 FROM student WHERE id = sl.user_id AND name LIKE CONCAT('%', #{userName}, '%')))
+                        )
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        ORDER BY sl.time DESC
+    </select>
+
+</mapper>

@@ -1,0 +1,124 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TestMapper">
+
+    <resultMap id="TestResultMap" type="com.example.entity.Test">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="testPaperId" column="test_paper_id"/>
+        <result property="start" column="start"/>
+        <result property="end" column="end"/>
+        <result property="duration" column="duration"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="content" column="content"/>
+        <result property="weatherCheck" column="weather_check"/>
+        <result property="weatherQuestionUnordered" column="weather_question_unordered"/>
+        <result property="weatherChoiceUnordered" column="weather_choice_unordered"/>
+        <result property="weatherCopy" column="weather_copy"/>
+        <result property="weatherFace" column="weather_face"/>
+        <result property="weatherDualCamera" column="weather_dual_camera"/>
+        <result property="weatherScreenSwitch" column="weather_screen_switch"/>
+        <result property="courseName" column="courseName"/>
+        <result property="teacherName" column="teacherName"/>
+        <association property="testPaper" javaType="com.example.entity.TestPaper" 
+                     select="com.example.mapper.TestPaperMapper.selectById" 
+                     column="test_paper_id"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="TestResultMap">
+        select
+            t.*,
+            c.name as courseName,
+            te.name as teacherName
+        from test t
+        left join test_paper tp on t.test_paper_id = tp.id
+        left join course c on tp.course_id = c.id
+        left join teacher te on tp.teacher_id = te.id
+        <where>
+            <if test="name != null and name != ''">and LOWER(t.name) like LOWER(concat('%', #{name}, '%'))</if>
+            <if test="testPaperId != null">and t.test_paper_id = #{testPaperId}</if>
+        </where>
+        order by t.id desc
+    </select>
+
+    <select id="selectById" resultMap="TestResultMap">
+        select
+            t.*,
+            c.name as courseName,
+            te.name as teacherName
+        from test t
+        left join test_paper tp on t.test_paper_id = tp.id
+        left join course c on tp.course_id = c.id
+        left join teacher te on tp.teacher_id = te.id
+        where t.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.entity.Test" useGeneratedKeys="true" keyProperty="id">
+        insert into test
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="testPaperId != null">test_paper_id,</if>
+            <if test="start != null">start,</if>
+            <if test="end != null">end,</if>
+            <if test="duration != null">duration,</if>
+            <if test="releaseTime != null">release_time,</if>
+            <if test="content != null">content,</if>
+            <if test="weatherCheck != null">weather_check,</if>
+            <if test="weatherQuestionUnordered != null">weather_question_unordered,</if>
+            <if test="weatherChoiceUnordered != null">weather_choice_unordered,</if>
+            <if test="weatherCopy != null">weather_copy,</if>
+            <if test="weatherFace != null">weather_face,</if>
+            <if test="weatherDualCamera != null">weather_dual_camera,</if>
+            <if test="weatherScreenSwitch != null">weather_screen_switch,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="testPaperId != null">#{testPaperId},</if>
+            <if test="start != null">#{start},</if>
+            <if test="end != null">#{end},</if>
+            <if test="duration != null">#{duration},</if>
+            <if test="releaseTime != null">#{releaseTime},</if>
+            <if test="content != null">#{content},</if>
+            <if test="weatherCheck != null">#{weatherCheck},</if>
+            <if test="weatherQuestionUnordered != null">#{weatherQuestionUnordered},</if>
+            <if test="weatherChoiceUnordered != null">#{weatherChoiceUnordered},</if>
+            <if test="weatherCopy != null">#{weatherCopy},</if>
+            <if test="weatherFace != null">#{weatherFace},</if>
+            <if test="weatherDualCamera != null">#{weatherDualCamera},</if>
+            <if test="weatherScreenSwitch != null">#{weatherScreenSwitch},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Test">
+        update test
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="testPaperId != null">test_paper_id = #{testPaperId},</if>
+            <if test="start != null">start = #{start},</if>
+            <if test="end != null">end = #{end},</if>
+            <if test="duration != null">duration = #{duration},</if>
+            <if test="releaseTime != null">release_time = #{releaseTime},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="weatherCheck != null">weather_check = #{weatherCheck},</if>
+            <if test="weatherQuestionUnordered != null">weather_question_unordered = #{weatherQuestionUnordered},</if>
+            <if test="weatherChoiceUnordered != null">weather_choice_unordered = #{weatherChoiceUnordered},</if>
+            <if test="weatherCopy != null">weather_copy = #{weatherCopy},</if>
+            <if test="weatherFace != null">weather_face = #{weatherFace},</if>
+            <if test="weatherDualCamera != null">weather_dual_camera = #{weatherDualCamera},</if>
+            <if test="weatherScreenSwitch != null">weather_screen_switch = #{weatherScreenSwitch},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from test where id = #{id}
+    </delete>
+
+    <select id="selectByTestPaperId" resultMap="TestResultMap">
+        select * from test where test_paper_id = #{testPaperId}
+    </select>
+
+</mapper>

@@ -1,0 +1,14 @@
+port: 7880
+rtc:
+  tcp_port: 7881
+  port_range_start: 50000
+  port_range_end: 50020
+  # 本地环境禁用STUN，直接使用配置的IP
+  use_external_ip: false
+  # 使用本地IP作为通信地址
+  node_ip: 127.0.0.1
+  # 禁用自动检测外部IP
+  stun_servers: []
+keys:
+  # 这里的 API Key 和 Secret 用于您的前端/后端生成访问 Token
+  devkey: 

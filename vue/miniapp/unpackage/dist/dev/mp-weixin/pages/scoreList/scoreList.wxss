@@ -1,0 +1,192 @@
+
+.score-list-container.data-v-1f3c9430 {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding-bottom: 40rpx;
+}
+.header-card.data-v-1f3c9430 {
+  background: linear-gradient(135deg, #409eff 0%, #79bbff 100%);
+  padding: 40rpx 30rpx;
+  color: white;
+}
+.user-info.data-v-1f3c9430 {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30rpx;
+}
+.greeting.data-v-1f3c9430 {
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+.student-no.data-v-1f3c9430 {
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+.stat-info.data-v-1f3c9430 {
+  display: flex;
+  justify-content: space-around;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+.stat-item.data-v-1f3c9430 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stat-value.data-v-1f3c9430 {
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+.stat-label.data-v-1f3c9430 {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+.exam-list.data-v-1f3c9430 {
+  padding: 20rpx;
+}
+.empty-state.data-v-1f3c9430 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+.empty-icon.data-v-1f3c9430 {
+  font-size: 100rpx;
+  margin-bottom: 20rpx;
+}
+.empty-text.data-v-1f3c9430 {
+  font-size: 28rpx;
+  color: #909399;
+}
+.exam-card.data-v-1f3c9430 {
+  background-color: white;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+.exam-header.data-v-1f3c9430 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.exam-name.data-v-1f3c9430 {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #303133;
+  flex: 1;
+  margin-right: 20rpx;
+}
+.status-badge.data-v-1f3c9430 {
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  white-space: nowrap;
+}
+.status-success.data-v-1f3c9430 {
+  background-color: #f0f9ff;
+  color: #67c23a;
+}
+.status-warning.data-v-1f3c9430 {
+  background-color: #fdf6ec;
+  color: #e6a23c;
+}
+.exam-info.data-v-1f3c9430 {
+  margin-bottom: 20rpx;
+}
+.info-row.data-v-1f3c9430 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+  font-size: 26rpx;
+}
+.info-label.data-v-1f3c9430 {
+  color: #909399;
+  margin-right: 12rpx;
+}
+.info-value.data-v-1f3c9430 {
+  color: #606266;
+}
+.exam-footer.data-v-1f3c9430 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+.score-info.data-v-1f3c9430 {
+  display: flex;
+  align-items: baseline;
+}
+.score-label.data-v-1f3c9430 {
+  font-size: 26rpx;
+  color: #909399;
+  margin-right: 12rpx;
+}
+.score-value.data-v-1f3c9430 {
+  font-size: 40rpx;
+  font-weight: bold;
+}
+.score-excellent.data-v-1f3c9430 {
+  color: #67c23a;
+}
+.score-good.data-v-1f3c9430 {
+  color: #409eff;
+}
+.score-pass.data-v-1f3c9430 {
+  color: #e6a23c;
+}
+.score-fail.data-v-1f3c9430 {
+  color: #f56c6c;
+}
+.action-area.data-v-1f3c9430 {
+  display: flex;
+  align-items: center;
+}
+.cheat-warning.data-v-1f3c9430 {
+  font-size: 24rpx;
+  color: #f56c6c;
+}
+.disabled-text.data-v-1f3c9430 {
+  font-size: 24rpx;
+  color: #c0c4cc;
+}
+.view-text.data-v-1f3c9430 {
+  font-size: 26rpx;
+  color: #409eff;
+  font-weight: 500;
+}
+.pagination.data-v-1f3c9430 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 20rpx;
+  gap: 20rpx;
+}
+.page-btn.data-v-1f3c9430 {
+  padding: 16rpx 32rpx;
+  background-color: white;
+  border: 1rpx solid #dcdfe6;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  color: #606266;
+}
+.page-btn.data-v-1f3c9430:disabled {
+  opacity: 0.5;
+}
+.page-btn.data-v-1f3c9430::after {
+  border: none;
+}
+.page-info.data-v-1f3c9430 {
+  font-size: 26rpx;
+  color: #606266;
+  padding: 0 20rpx;
+}
+

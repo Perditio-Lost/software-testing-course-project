@@ -1,0 +1,79 @@
+server:
+  address: localhost
+  port: 8080
+
+# 数据库配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ${DB_PASSWORD:}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/your_database?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai}
+
+  # Redis 配置
+  data:
+    redis:
+      database: 0
+      host: localhost
+      password: ${REDIS_PASSWORD:}
+      port: 6379
+  
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# 配置mybatis实体和xml映射
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+
+fileBaseUrl: http://localhost:${server.port}
+
+# QQ邮箱配置
+email:
+  # 发送邮件的邮箱账号
+  sender: ${EMAIL_SENDER:your_email@qq.com}
+  # 邮箱授权码
+  password: ${EMAIL_PASSWORD:your_email_authorization_code}
+  # SMTP服务器地址
+  host: smtp.qq.com
+  # SMTP端口
+  port: 465
+
+# 百度AI人脸识别配置
+baidu:
+  ai:
+    # 百度AI应用的API Key
+    apiKey: ${BAIDU_AI_API_KEY:your_baidu_ai_api_key}
+    # 百度AI应用的Secret Key
+    secretKey: ${BAIDU_AI_SECRET_KEY:your_baidu_ai_secret_key}
+    # 人脸库分组ID
+    groupId: "123"
+
+# 腾讯云COS对象存储配置
+tencent:
+  cos:
+    # 腾讯云账号的密钥ID
+    secretId: ${TENCENT_COS_SECRET_ID:your_tencent_cos_secret_id}
+    # 腾讯云账号的密钥
+    secretKey: ${TENCENT_COS_SECRET_KEY:your_tencent_cos_secret_key}
+    # 存储桶所在地域
+    region: ${TENCENT_COS_REGION:your_region}
+    # 存储桶名称
+    bucketName: ${TENCENT_COS_BUCKET_NAME:your_bucket_name}
+    # 文件访问基础URL
+    baseUrl: ${TENCENT_COS_BASE_URL:https://your_bucket_name.cos.your_region.myqcloud.com}
+    # 文件存储路径前缀
+    pathPrefix: ${TENCENT_COS_PATH_PREFIX:uploads/}
+
+# LiveKit Server 配置
+livekit:
+  # LiveKit Server WebSocket地址
+  host: ws://localhost:7880
+  # API密钥
+  apiKey: ${LIVEKIT_API_KEY:your_livekit_api_key}
+  apiSecret: ${LIVEKIT_API_SECRET:your_livekit_api_secret}

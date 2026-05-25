@@ -1,0 +1,57 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.AnswerMapper">
+
+    <insert id="insert" parameterType="com.example.entity.Answer" useGeneratedKeys="true" keyProperty="id">
+        insert into `answer` (score_id, test_paper_question_id, answer, score, status)
+        values (#{scoreId}, #{testPaperQuestionId}, #{answer}, #{score}, #{status})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Answer">
+        update `answer`
+        <set>
+            <if test="answer != null">answer = #{answer},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteByScoreId">
+        delete from `answer` where score_id = #{scoreId}
+    </delete>
+
+    <select id="selectByScoreId" resultType="com.example.entity.Answer">
+        select answer.id,
+               answer.score_id as scoreId,
+               answer.test_paper_question_id as testPaperQuestionId,
+               answer.answer,
+               answer.score,
+               answer.status,
+               tpq.question_id as questionId,
+               tpq.score as questionScore,
+               tpq.type as testPaperQuestionType
+        from `answer`
+        left join test_paper_question tpq on answer.test_paper_question_id = tpq.id
+        where answer.score_id = #{scoreId}
+    </select>
+
+    <select id="selectBatchByScoreIds" resultType="com.example.entity.Answer">
+        select answer.id,
+               answer.score_id as scoreId,
+               answer.test_paper_question_id as testPaperQuestionId,
+               answer.answer,
+               answer.score,
+               answer.status,
+               tpq.question_id as questionId,
+               tpq.score as questionScore,
+               tpq.type as testPaperQuestionType
+        from `answer`
+        left join test_paper_question tpq on answer.test_paper_question_id = tpq.id
+        where answer.score_id in
+        <foreach collection="scoreIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

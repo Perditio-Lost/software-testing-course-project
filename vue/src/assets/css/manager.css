@@ -1,0 +1,146 @@
+/* 管理后台 - 蓝白配色 */
+.manager-container {
+    background: linear-gradient(135deg, #f0f5ff 0%, #fafcff 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.manager-header {
+    height: 70px;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f9ff 100%);
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    border-bottom: 2px solid var(--border-light);
+    flex-shrink: 0;
+}
+
+.manager-header-left {
+    background: transparent;
+    width: 320px;
+    height: 100%;
+    padding-left: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.manager-header-left img {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    border: 2px solid var(--primary-lightest);
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
+}
+
+.manager-header-left .title {
+    font-weight: 700;
+    font-size: 20px;
+    margin-left: 14px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.manager-header-center {
+    flex: 1;
+    padding-left: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.manager-main-left {
+    width: 220px;
+    background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    box-shadow: var(--shadow-sm);
+    border-right: 2px solid var(--border-light);
+    transition: all 0.3s ease;
+    overflow-y: auto;
+}
+
+.manager-main-right {
+    flex: 1;
+    width: 0;
+    background: linear-gradient(135deg, #f0f5ff 0%, #fafcff 100%);
+    padding: 0;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+
+/* ElementUI - 蓝白主题 */
+.el-menu {
+    border: none;
+    background: transparent !important;
+}
+
+.el-tooltip__trigger {
+    outline: none;
+}
+
+.el-sub-menu__title {
+    color: var(--text-secondary) !important;
+    height: 52px;
+    line-height: 52px;
+    background-color: transparent !important;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 3px 12px;
+}
+
+.el-sub-menu__title:hover {
+    background: linear-gradient(90deg, #e6f7ff 0%, #bae7ff 40%) !important;
+    color: var(--primary-color) !important;
+    transform: translateX(4px);
+}
+
+.el-menu-item {
+    color: var(--text-light);
+    height: 48px;
+    line-height: 48px;
+    background-color: transparent !important;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 2px 12px;
+    font-weight: 500;
+}
+
+.el-menu--inline .el-menu-item {
+    background-color: transparent !important;
+    padding-left: 54px !important;
+}
+
+.el-menu-item.is-active {
+    background: linear-gradient(90deg, #e6f7ff 0%, #bae7ff 60%) !important;
+    color: var(--primary-color) !important;
+    border-left: 4px solid var(--primary-color);
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+}
+
+.el-menu-item:not(.is-active):hover {
+    background: linear-gradient(90deg, #f0f5ff 0%, #e6f7ff 40%) !important;
+    color: var(--primary-color) !important;
+    transform: translateX(4px);
+}
+
+.el-breadcrumb__inner {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+}
+
+.el-breadcrumb__inner:hover {
+    color: var(--primary-color) !important;
+}
+
+.manager-header-right span {
+    color: var(--text-primary);
+    font-weight: 600;
+}

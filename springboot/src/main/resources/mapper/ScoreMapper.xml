@@ -1,0 +1,276 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ScoreMapper">
+
+    <resultMap id="ScoreResultMap" type="com.example.entity.Score">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="testId" column="test_id"/>
+        <result property="score" column="score"/>
+        <result property="status" column="status"/>
+        <result property="cheat" column="cheat"/>
+        <result property="facePhotoUrl" column="facePhotoUrl"/>
+        <result property="studentName" column="studentName"/>
+        <result property="studentNumber" column="studentNumber"/>
+        <result property="teacherId" column="teacherId"/>
+        <result property="teacherName" column="teacherName"/>
+        <result property="clazzName" column="clazzName"/>
+        <association property="test" javaType="com.example.entity.Test"
+                    select="com.example.mapper.TestMapper.selectById"
+                    column="test_id"/>
+        <collection property="answers" ofType="com.example.entity.Answer"
+                    select="com.example.mapper.AnswerMapper.selectByScoreId"
+                    column="id"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.example.entity.Score" useGeneratedKeys="true" keyProperty="id">
+        insert into `score` (student_id, test_id, score, status, cheat)
+        values (#{studentId}, #{testId}, #{score}, #{status}, #{cheat})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Score">
+        update `score`
+        <set>
+            <if test="score != null">score = #{score},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="cheat != null">cheat = #{cheat},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from `score` where id = #{id}
+    </delete>
+
+    <select id="selectAll" resultMap="ScoreResultMap">
+        select score.id, score.student_id, score.test_id, score.score, score.status, score.cheat,
+               student.name as studentName, student.username as studentNumber,
+               test.id as testId, test.name as testName, test.test_paper_id as testPaperId,
+               test.start as start, test.end as end, test.duration as duration,
+               test.release_time as releaseTime, test.weather_check as weatherCheck, test_paper.teacher_id as teacherId
+        from `score`
+        left join student on score.student_id = student.id
+        left join test on score.test_id = test.id
+        left join test_paper on test.test_paper_id = test_paper.id
+        <where>
+            <if test="studentId != null"> and score.student_id = #{studentId}</if>
+            <if test="teacherId != null"> and test_paper.teacher_id = #{teacherId}</if>
+            <if test="testId != null"> and score.test_id = #{testId}</if>
+            <if test="status != null"> and score.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectById" resultMap="ScoreResultMap">
+        select * from `score` where id = #{id}
+    </select>
+
+    <select id="selectByPaperId" resultMap="ScoreResultMap">
+        select score.*, student.name as studentName, student.username as studentNumber from `score`
+        left join test on score.test_id = test.id
+        left join student on score.student_id = student.id
+        where test.test_paper_id = #{paperId}
+    </select>
+
+    <select id="selectByTestId" resultMap="ScoreResultMap">
+        select score.*, student.name as studentName, student.username as studentNumber from `score`
+        left join student on score.student_id = student.id
+        where score.test_id = #{testId}
+        order by student.name
+    </select>
+
+    <select id="selectByTestIdAndClazz" resultMap="ScoreResultMap">
+        select score.*, student.name as studentName, student.username as studentNumber from `score`
+        left join student on score.student_id = student.id
+        left join student_clazz sc on student.id = sc.student_id
+        where score.test_id = #{testId}
+        <if test="clazzId != null">
+            and sc.clazz_id = #{clazzId}
+        </if>
+        order by student.name
+    </select>
+
+    <select id="selectQuestionsByTestId" resultType="java.util.HashMap">
+        SELECT 
+            q.id,
+            q.question_stem as questionStem,
+            qt.name as questionTypeName,
+            qt.variety as questionTypeVariety,
+            tpq.score as typeScore,
+            (SELECT COUNT(*) FROM score WHERE test_id = #{testId} AND cheat != 1) as totalCount,
+            COUNT(DISTINCT CASE WHEN a.status = '已批改' THEN a.score_id END) as gradedCount
+        FROM test t
+        INNER JOIN test_paper tp ON t.test_paper_id = tp.id
+        INNER JOIN test_paper_question tpq ON tp.id = tpq.test_paper_id
+        INNER JOIN question q ON tpq.question_id = q.id
+        INNER JOIN question_type qt ON q.question_type_id = qt.id
+        LEFT JOIN answer a ON a.test_paper_question_id = tpq.id
+            AND a.score_id IN (SELECT id FROM score WHERE test_id = #{testId} AND cheat != 1)
+        WHERE t.id = #{testId}
+        AND qt.name NOT IN ('单选', '多选', '判断')
+        AND q.id NOT IN (SELECT question_son_id FROM composite WHERE question_son_id IS NOT NULL)
+        GROUP BY q.id, q.question_stem, qt.name, qt.variety, tpq.score, tpq.id
+        ORDER BY tpq.id
+    </select>
+
+    <select id="selectQuestionsByTestIdAndClazz" resultType="java.util.HashMap">
+        SELECT 
+            q.id,
+            q.question_stem as questionStem,
+            qt.name as questionTypeName,
+            qt.variety as questionTypeVariety,
+            tpq.score as typeScore,
+            (SELECT COUNT(*) 
+             FROM score s
+             LEFT JOIN student st ON s.student_id = st.id
+             LEFT JOIN student_clazz sc ON st.id = sc.student_id
+             WHERE s.test_id = #{testId} 
+             AND s.cheat != 1
+             <if test="clazzId != null">
+                 AND sc.clazz_id = #{clazzId}
+             </if>
+            ) as totalCount,
+            COUNT(DISTINCT CASE WHEN a.status = '已批改' THEN a.score_id END) as gradedCount
+        FROM test t
+        INNER JOIN test_paper tp ON t.test_paper_id = tp.id
+        INNER JOIN test_paper_question tpq ON tp.id = tpq.test_paper_id
+        INNER JOIN question q ON tpq.question_id = q.id
+        INNER JOIN question_type qt ON q.question_type_id = qt.id
+        LEFT JOIN answer a ON a.test_paper_question_id = tpq.id
+            AND a.score_id IN (
+                SELECT s.id 
+                FROM score s
+                LEFT JOIN student st ON s.student_id = st.id
+                LEFT JOIN student_clazz sc ON st.id = sc.student_id
+                WHERE s.test_id = #{testId} 
+                AND s.cheat != 1
+                <if test="clazzId != null">
+                    AND sc.clazz_id = #{clazzId}
+                </if>
+            )
+        WHERE t.id = #{testId}
+        AND qt.name NOT IN ('单选', '多选', '判断')
+        AND tpq.type IN ('common', 'father')
+        GROUP BY q.id, q.question_stem, qt.name, qt.variety, tpq.score, tpq.id
+        ORDER BY tpq.id
+    </select>
+
+    <select id="selectAnswersByQuestion" resultType="java.util.HashMap">
+        SELECT 
+            q.id as id,
+            q.question_stem as questionStem,
+            qt.name as questionTypeName,
+            qt.variety as questionTypeVariety,
+            q.answer as answer
+        FROM question q
+        INNER JOIN question_type qt ON q.question_type_id = qt.id
+        WHERE q.id = #{questionId}
+    </select>
+
+    <select id="selectStudentAnswersByQuestion" resultType="java.util.HashMap">
+        SELECT 
+            s.id as scoreId,
+            s.student_id as studentId,
+            st.name as studentName,
+            GROUP_CONCAT(a.id ORDER BY tpq.id) as answerIds,
+            GROUP_CONCAT(COALESCE(a.answer, '') ORDER BY tpq.id SEPARATOR '|||') as answers,
+            GROUP_CONCAT(COALESCE(a.score, 0) ORDER BY tpq.id) as scores,
+            GROUP_CONCAT(COALESCE(a.status, '未批改') ORDER BY tpq.id SEPARATOR '|||') as statuses,
+            GROUP_CONCAT(tpq.question_id ORDER BY tpq.id) as questionIds
+        FROM score s
+        INNER JOIN student st ON s.student_id = st.id
+        INNER JOIN test t ON s.test_id = t.id
+        INNER JOIN test_paper tp ON t.test_paper_id = tp.id
+        INNER JOIN test_paper_question tpq ON tp.id = tpq.test_paper_id
+        LEFT JOIN answer a ON a.score_id = s.id AND a.test_paper_question_id = tpq.id
+        LEFT JOIN composite c ON c.question_son_id = tpq.question_id
+        WHERE s.test_id = #{testId}
+        AND (tpq.question_id = #{questionId} OR c.question_father_id = #{questionId})
+        AND s.cheat != 1
+        GROUP BY s.id, s.student_id, st.name
+        ORDER BY st.name
+    </select>
+
+    <update id="updateAnswerScore">
+        UPDATE answer a
+        INNER JOIN test_paper_question tpq ON a.test_paper_question_id = tpq.id
+        SET a.score = #{score},
+            a.status = '已批改'
+        WHERE a.score_id = #{scoreId}
+        AND tpq.question_id = #{questionId}
+    </update>
+
+    <update id="updateCompositeParentStatus">
+        UPDATE answer a
+        INNER JOIN test_paper_question tpq ON a.test_paper_question_id = tpq.id
+        SET a.status = '已批改'
+        WHERE a.score_id = #{scoreId}
+        AND tpq.question_id = #{questionId}
+    </update>
+
+    <select id="selectAbnormal" resultMap="ScoreResultMap">
+        SELECT 
+            score.id, 
+            score.student_id, 
+            score.test_id, 
+            score.score, 
+            score.status, 
+            score.cheat,
+            student.name as studentName,
+            student.username as studentNumber,
+            test.name as testName,
+            test.start as testStart,
+            test_paper.name as testPaperName,
+            teacher.name as teacherName,
+            (SELECT GROUP_CONCAT(c.name SEPARATOR ', ') 
+             FROM test_clazz tc 
+             LEFT JOIN clazz c ON tc.clazz_id = c.id 
+             WHERE tc.test_id = test.id) as clazzName
+        FROM `score`
+        LEFT JOIN student ON score.student_id = student.id
+        LEFT JOIN test ON score.test_id = test.id
+        LEFT JOIN test_paper ON test.test_paper_id = test_paper.id
+        LEFT JOIN teacher ON test_paper.teacher_id = teacher.id
+        WHERE score.cheat = 1
+        <if test="testName != null and testName != ''">
+            AND test.name LIKE CONCAT('%', #{testName}, '%')
+        </if>
+        <if test="studentName != null and studentName != ''">
+            AND (student.name LIKE CONCAT('%', #{studentName}, '%') 
+                 OR student.username LIKE CONCAT('%', #{studentName}, '%'))
+        </if>
+        <if test="testPaperName != null and testPaperName != ''">
+            AND test_paper.name LIKE CONCAT('%', #{testPaperName}, '%')
+        </if>
+        <if test="teacherId != null">
+            AND EXISTS (
+                SELECT 1 FROM test_clazz tc
+                LEFT JOIN clazz c ON tc.clazz_id = c.id
+                WHERE tc.test_id = test.id AND c.teacher_id = #{teacherId}
+            )
+        </if>
+        ORDER BY test.start DESC, student.name
+    </select>
+
+    <select id="selectGradedScores" resultMap="ScoreResultMap">
+        SELECT 
+            score.id, 
+            score.student_id, 
+            score.test_id, 
+            score.score, 
+            score.status, 
+            score.cheat,
+            student.name as studentName,
+            student.username as studentNumber,
+            clazz.name as clazzName
+        FROM `score`
+        LEFT JOIN student ON score.student_id = student.id
+        LEFT JOIN student_clazz sc ON student.id = sc.student_id
+        LEFT JOIN clazz ON sc.clazz_id = clazz.id
+        WHERE score.status = '已批改'
+        AND score.test_id = #{testId}
+        AND sc.clazz_id = #{clazzId}
+        ORDER BY student.name
+    </select>
+
+</mapper>

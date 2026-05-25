@@ -1,0 +1,58 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TestPaperQuestionMapper">
+
+    <insert id="insert" parameterType="com.example.entity.TestPaperQuestion" useGeneratedKeys="true" keyProperty="id">
+        insert into `test_paper_question`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="testPaperId != null">test_paper_id,</if>
+            <if test="questionId != null">question_id,</if>
+            <if test="sequence != null">sequence,</if>
+            <if test="score != null">score,</if>
+            <if test="type != null">type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="testPaperId != null">#{testPaperId},</if>
+            <if test="questionId != null">#{questionId},</if>
+            <if test="sequence != null">#{sequence},</if>
+            <if test="score != null">#{score},</if>
+            <if test="type != null">#{type},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.TestPaperQuestion">
+        update `test_paper_question`
+        <set>
+            <if test="testPaperId != null">test_paper_id = #{testPaperId},</if>
+            <if test="questionId != null">question_id = #{questionId},</if>
+            <if test="sequence != null">sequence = #{sequence},</if>
+            <if test="score != null">score = #{score},</if>
+            <if test="type != null">type = #{type},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectByTestPaperId" resultType="com.example.entity.TestPaperQuestion">
+        select * from test_paper_question where test_paper_id = #{testPaperId} order by sequence
+    </select>
+    
+    <select id="selectByQuestionId" resultType="com.example.entity.TestPaperQuestion">
+        select * from test_paper_question where question_id = #{questionId}
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.TestPaperQuestion">
+        select * from test_paper_question where id = #{id}
+    </select>
+
+    <delete id="deleteByTestPaperId">
+        delete from test_paper_question where test_paper_id = #{testPaperId}
+    </delete>
+
+    <delete id="deleteById">
+        delete from test_paper_question where id = #{id}
+    </delete>
+
+</mapper>

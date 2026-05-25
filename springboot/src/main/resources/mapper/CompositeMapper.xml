@@ -1,0 +1,32 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CompositeMapper">
+
+    <insert id="insert" parameterType="com.example.entity.Composite" useGeneratedKeys="true">
+        insert into `composite`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="questionFatherId != null">question_father_id,</if>
+            <if test="questionSonId != null">question_son_id,</if>
+            <if test="sequence != null">sequence,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="questionFatherId != null">#{questionFatherId},</if>
+            <if test="questionSonId != null">#{questionSonId},</if>
+            <if test="sequence != null">#{sequence},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Composite">
+        update `composite`
+        <set>
+            <if test="questionFatherId != null">question_father_id = #{questionFatherId},</if>
+            <if test="questionSonId != null">question_son_id = #{questionSonId},</if>
+            <if test="sequence != null">sequence = #{sequence},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

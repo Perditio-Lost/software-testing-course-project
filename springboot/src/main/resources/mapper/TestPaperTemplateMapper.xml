@@ -1,0 +1,117 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TestPaperTemplateMapper">
+
+    <select id="selectAll" resultType="com.example.entity.TestPaperTemplate">
+        select *
+        from `test_paper_template`
+        <where>
+            <if test="name != null"> and LOWER(name) like LOWER(concat('%', #{name}, '%'))</if>
+            <if test="courseId != null"> and course_id = #{courseId}</if>
+            <if test="teacherId != null"> and teacher_id = #{teacherId}</if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.TestPaperTemplate">
+        select *
+        from `test_paper_template`
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from `test_paper_template`
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.TestPaperTemplate" useGeneratedKeys="true" keyProperty="id">
+        insert into `test_paper_template`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="teacherId != null">teacher_id,</if>
+            <if test="choiceNum != null">choice_num,</if>
+            <if test="multiChoiceNum != null">multi_choice_num,</if>
+            <if test="fillInNum != null">fill_in_num,</if>
+            <if test="checkNum != null">check_num,</if>
+            <if test="textNum != null">text_num,</if>
+            <if test="compositeNum != null">composite_num,</if>
+            <if test="choiceScore != null">choice_score,</if>
+            <if test="multiChoiceScore != null">multi_choice_score,</if>
+            <if test="fillInScore != null">fill_in_score,</if>
+            <if test="checkScore != null">check_score,</if>
+            <if test="textScore != null">text_score,</if>
+            <if test="compositeScore != null">composite_score,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="teacherId != null">#{teacherId},</if>
+            <if test="choiceNum != null">#{choiceNum},</if>
+            <if test="multiChoiceNum != null">#{multiChoiceNum},</if>
+            <if test="fillInNum != null">#{fillInNum},</if>
+            <if test="checkNum != null">#{checkNum},</if>
+            <if test="textNum != null">#{textNum},</if>
+            <if test="compositeNum != null">#{compositeNum},</if>
+            <if test="choiceScore != null">#{choiceScore},</if>
+            <if test="multiChoiceScore != null">#{multiChoiceScore},</if>
+            <if test="fillInScore != null">#{fillInScore},</if>
+            <if test="checkScore != null">#{checkScore},</if>
+            <if test="textScore != null">#{textScore},</if>
+            <if test="compositeScore != null">#{compositeScore},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.TestPaperTemplate">
+        update `test_paper_template`
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="courseId != null">
+                course_id = #{courseId},
+            </if>
+            <if test="choiceNum != null">
+                choice_num = #{choiceNum},
+            </if>
+            <if test="multiChoiceNum != null">
+                multi_choice_num = #{multiChoiceNum},
+            </if>
+            <if test="fillInNum != null">
+                fill_in_num = #{fillInNum},
+            </if>
+            <if test="checkNum != null">
+                check_num = #{checkNum},
+            </if>
+            <if test="textNum != null">
+                text_num = #{textNum},
+            </if>
+            <if test="compositeNum != null">
+                composite_num = #{compositeNum},
+            </if>
+            <if test="choiceScore != null">
+                choice_score = #{choiceScore},
+            </if>
+            <if test="multiChoiceScore != null">
+                multi_choice_score = #{multiChoiceScore},
+            </if>
+            <if test="fillInScore != null">
+                fill_in_score = #{fillInScore},
+            </if>
+            <if test="checkScore != null">
+                check_score = #{checkScore},
+            </if>
+            <if test="textScore != null">
+                text_score = #{textScore},
+            </if>
+            <if test="compositeScore != null">
+                composite_score = #{compositeScore},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
+

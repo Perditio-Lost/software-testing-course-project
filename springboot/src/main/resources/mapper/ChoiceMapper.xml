@@ -1,0 +1,45 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ChoiceMapper">
+
+    <insert id="insert" parameterType="com.example.entity.Choice" useGeneratedKeys="true">
+        insert into `choice`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="questionId != null">question_id,</if>
+            <if test="identification != null">identification,</if>
+            <if test="content != null">content,</if>
+            <if test="sequence != null">sequence,</if>
+            <if test="flag != null">flag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="questionId != null">#{questionId},</if>
+            <if test="identification != null">#{identification},</if>
+            <if test="content != null">#{content},</if>
+            <if test="sequence != null">#{sequence},</if>
+            <if test="flag != null">#{flag},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.Choice">
+        update `choice`
+        <set>
+            <if test="identification != null">identification = #{identification},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="sequence != null">sequence = #{sequence},</if>
+            <if test="flag != null">flag = #{flag},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteByQuestionId">
+        delete from `choice` where question_id = #{questionId}
+    </delete>
+
+    <select id="selectByQuestionId" resultType="com.example.entity.Choice">
+        select * from `choice` where question_id = #{questionId} order by sequence
+    </select>
+
+</mapper>
